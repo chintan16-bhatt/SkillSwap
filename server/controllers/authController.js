@@ -73,5 +73,16 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+// @route   GET /api/auth/profile
+const getProfile = async (req, res) => {
+  res.status(200).json({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    credits: req.user.credits,
+    bio: req.user.bio,
+  });
+};
 
-module.exports = { registerUser, loginUser };
+
+module.exports = { registerUser, loginUser,getProfile};
