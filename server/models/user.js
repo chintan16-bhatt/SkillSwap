@@ -28,6 +28,27 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 5,
   },
+   skillsOffered: {
+  type: [String],  // array of strings e.g. ["JavaScript", "Guitar"]
+  default: [],
+},
+skillsWanted: {
+  type: [String],
+  default: [],
+},
+location: {
+  type: String,
+  default: '',
+  trim: true,
+},
+profilePicture: {
+  type: String,
+  default: '',
+},
+isActive: {
+  type: Boolean,
+  default: true,
+},
 }, { timestamps: true });
 
 userSchema.pre('save', async function () {
