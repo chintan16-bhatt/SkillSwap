@@ -64,6 +64,40 @@ const getUserById = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+// @route   GET /api/users/search
+// @access  Private
+const searchUsers = async (req, res) => {
+  try {
+    const { skill, location } = req.query;
 
-module.exports = { getMyProfile, updateMyProfile, getUserById };
-//helloooo my son
+    // Must provide at least a skill to search
+    if (!skill) {
+      return res.status(400).json({ message: 'Please provide a skill to search for' });
+    }
+
+    // Build the filter dynamically
+    const filter = {
+      skillsOffered: { $regex: skill, $options: 'i' },
+      isActive: true,
+      _id: { $ne: req.user._id }, // exclude the searching user themselves
+    };
+
+    // Add location filter if provided
+    if (location) {
+      filter.location = { $regex: location, $options: 'i' };
+    }
+
+    const users = await User.find(filter)
+      .select('name bio skillsOffered skillsWanted location profilePicture credits')
+      .limit(20); // max 20 results per search
+
+    res.status(200).json({
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = { getMyProfile, updateMyProfile, getUserById , searchUsers};
