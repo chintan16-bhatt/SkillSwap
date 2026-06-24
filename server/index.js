@@ -6,6 +6,7 @@ const helmet = require('helmet');
 require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const swapRoutes = require('./routes/swapRoutes');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes); 
 app.use('/api/users', userRoutes);
+app.use('/api/swaps', swapRoutes);
 
 // Test route
 app.get('/', (req, res) => {
