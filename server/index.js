@@ -7,6 +7,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const swapRoutes = require('./routes/swapRoutes');
+const aiRoutes=require('./routes/aiRoutes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes); 
 app.use('/api/users', userRoutes);
 app.use('/api/swaps', swapRoutes);
+app.use('/api/ai',aiRoutes);
 
 // Test route
 app.get('/', (req, res) => {
