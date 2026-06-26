@@ -100,4 +100,44 @@ const searchUsers = async (req, res) => {
   }
 };
 
-module.exports = { getMyProfile, updateMyProfile, getUserById , searchUsers};
+// @route   GET /api/users/credits
+// @access  Private
+const getMyCredits = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('name credits');
+
+    // Get completed swaps to show credit history
+    const Swap = require('../models/Swap');
+
+    const completedSwaps = await Swap.find({
+      $or: [{ sender: req.user._id }, { receiver: req.user._id }],
+      status: 'completed',
+    })
+      .populate('sender', 'name')
+      .populate('receiver', 'name')
+      .select('sender receiver skillOffered skillWanted status createdAt')
+      .sort({ updatedAt: -1 })
+      .limit(10);
+
+    // Format transaction history
+    const history = completedSwaps.map((swap) => {
+      const isSender = swap.sender._id.toString() === req.user._id.toString();
+      return {
+        type: isSender ? 'earned' : 'spent',
+        amount: isSender ? +1 : -1,
+        skill: isSender ? swap.skillOffered : swap.skillWanted,
+        with: isSender ? swap.receiver.name : swap.sender.name,
+        date: swap.updatedAt,
+      };
+    });
+
+    res.status(200).json({
+      credits: user.credits,
+      history,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = { getMyProfile, updateMyProfile, getUserById, searchUsers, getMyCredits };

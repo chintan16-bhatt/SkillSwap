@@ -158,7 +158,6 @@ const completeSwap = async (req, res) => {
       return res.status(404).json({ message: 'Swap not found' });
     }
 
-    // Only sender or receiver can complete
     const isParticipant =
       swap.sender.toString() === req.user._id.toString() ||
       swap.receiver.toString() === req.user._id.toString();
@@ -171,13 +170,49 @@ const completeSwap = async (req, res) => {
       return res.status(400).json({ message: `Cannot complete a swap that is ${swap.status}` });
     }
 
+    // Check receiver has enough credits
+    const receiver = await User.findById(swap.receiver);
+    if (receiver.credits < 1) {
+      return res.status(400).json({
+        message: 'Receiver does not have enough credits to complete this swap',
+      });
+    }
+
+    // Atomic credit transfer
+    // Receiver loses 1 credit (consumed the skill)
+    await User.findByIdAndUpdate(
+      swap.receiver,
+      { $inc: { credits: -1 } },
+      { new: true }
+    );
+
+    // Sender gains 1 credit (provided the skill)
+    await User.findByIdAndUpdate(
+      swap.sender,
+      { $inc: { credits: 1 } },
+      { new: true }
+    );
+
+    // Mark swap as completed
     swap.status = 'completed';
     await swap.save();
 
-    res.status(200).json(swap);
+    // Get updated user data to return
+    const updatedSender = await User.findById(swap.sender).select('name credits');
+    const updatedReceiver = await User.findById(swap.receiver).select('name credits');
+
+    res.status(200).json({
+      message: 'Swap completed successfully',
+      swap,
+      creditTransfer: {
+        sender: { name: updatedSender.name, credits: updatedSender.credits },
+        receiver: { name: updatedReceiver.name, credits: updatedReceiver.credits },
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 module.exports = { createSwap, getMySwaps, acceptSwap, rejectSwap, cancelSwap, completeSwap };
