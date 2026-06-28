@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Search from './pages/search/Search';
@@ -11,12 +12,10 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Navbar />
         <Routes>
-          {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          {/* Protected routes */}
           <Route path="/search" element={
             <ProtectedRoute><Search /></ProtectedRoute>
           } />
@@ -26,8 +25,6 @@ function App() {
           <Route path="/profile" element={
             <ProtectedRoute><Profile /></ProtectedRoute>
           } />
-
-          {/* Default redirect */}
           <Route path="/" element={<Navigate to="/search" replace />} />
         </Routes>
       </AuthProvider>
