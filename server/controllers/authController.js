@@ -4,7 +4,7 @@ const User = require('../models/User');
 // Helper to generate a token
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: '15m', // short-lived access token
+    expiresIn: '15m',
   });
 };
 
@@ -31,6 +31,10 @@ const registerUser = async (req, res) => {
       name: user.name,
       email: user.email,
       credits: user.credits,
+      skillsOffered: user.skillsOffered,
+      skillsWanted: user.skillsWanted,
+      bio: user.bio,
+      location: user.location,
       token,
     });
   } catch (error) {
@@ -47,7 +51,6 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Please fill all fields' });
     }
 
-    // explicitly select password since schema has select:false
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
@@ -67,12 +70,17 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       credits: user.credits,
+      skillsOffered: user.skillsOffered,
+      skillsWanted: user.skillsWanted,
+      bio: user.bio,
+      location: user.location,
       token,
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 // @route   GET /api/auth/profile
 const getProfile = async (req, res) => {
   res.status(200).json({
@@ -80,9 +88,11 @@ const getProfile = async (req, res) => {
     name: req.user.name,
     email: req.user.email,
     credits: req.user.credits,
+    skillsOffered: req.user.skillsOffered,
+    skillsWanted: req.user.skillsWanted,
     bio: req.user.bio,
+    location: req.user.location,
   });
 };
 
-
-module.exports = { registerUser, loginUser,getProfile};
+module.exports = { registerUser, loginUser, getProfile };

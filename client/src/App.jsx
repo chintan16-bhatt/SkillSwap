@@ -6,6 +6,7 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Search from './pages/search/Search';
 import Swaps from './pages/swaps/Swaps';
+import NewSwapRequest from './pages/swaps/NewSwapRequest';
 import Profile from './pages/profile/Profile';
 
 function App() {
@@ -16,15 +17,23 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route path="/search" element={
             <ProtectedRoute><Search /></ProtectedRoute>
           } />
+
           <Route path="/swaps" element={
             <ProtectedRoute><Swaps /></ProtectedRoute>
           } />
+
+          <Route path="/swaps/new/:receiverId" element={
+            <ProtectedRoute><NewSwapRequest /></ProtectedRoute>
+          } />
+
           <Route path="/profile" element={
             <ProtectedRoute><Profile /></ProtectedRoute>
           } />
+
           <Route path="/" element={<Navigate to="/search" replace />} />
         </Routes>
       </AuthProvider>
