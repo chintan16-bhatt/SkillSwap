@@ -18,6 +18,7 @@ const Navbar = () => {
 
       <div style={styles.links}>
         <Link to="/search" style={styles.link}>Search</Link>
+        <Link to="/matches" style={styles.link}>✨ AI Matches</Link>
         <Link to="/swaps" style={styles.link}>My Swaps</Link>
         <Link to="/profile" style={styles.link}>Profile</Link>
         <span style={styles.credits}>⭐ {user.credits ?? '...'}</span>

@@ -82,6 +82,7 @@ Respond ONLY with a valid JSON array, no markdown, no explanation outside the JS
       suggestions,
     });
   } catch (error) {
+    console.error('AI Match Error:', error.message);
     // ← 429 handling added here too
     if (error.message.includes('429')) {
       return res.status(429).json({
