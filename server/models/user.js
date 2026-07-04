@@ -45,6 +45,7 @@ profilePicture: {
   type: String,
   default: '',
 },
+//name changed 
 isActive: {
   type: Boolean,
   default: true,
