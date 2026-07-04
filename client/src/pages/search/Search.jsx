@@ -72,7 +72,7 @@ const Search = () => {
               : `Found ${results.length} user${results.length > 1 ? 's' : ''}`}
           </p>
 
-          <div style={styles.grid}>
+          <div style={styles.grid} className="search-grid">
             {results.map((user) => (
               <div key={user._id} style={styles.card}>
                 {/* Avatar */}

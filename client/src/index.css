@@ -14,3 +14,30 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+  .navbar-hamburger {
+    display: block !important;
+  }
+  .navbar-links-desktop {
+    display: none !important;
+  }
+  .navbar-links-mobile {
+    display: flex !important;
+  }
+}
+
+/* Responsive grid for Search cards */
+@media (max-width: 600px) {
+  .search-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* General responsive containers */
+@media (max-width: 600px) {
+  .responsive-container {
+    padding: 20px 16px !important;
+  }
+}
