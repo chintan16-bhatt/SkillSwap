@@ -187,12 +187,12 @@ Visit `http://localhost:5173`
 
 ## Screenshots
 
-```markdown
+markdown
 ![Landing Page](screenshots/landing.png)
 ![Search](screenshots/search.png)
 ![AI Matches](screenshots/matches.png)
 ![Swaps Dashboard](screenshots/swaps.png)
-```
+
 
 ---
 

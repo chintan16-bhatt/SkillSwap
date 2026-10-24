@@ -2,7 +2,7 @@ const User = require('../models/User');
 
 // @route   GET /api/users/profile
 // @access  Private
-const getMyProfile = async (req, res) => {
+async function getMyProfile(req, res) {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -12,7 +12,7 @@ const getMyProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
-};
+}
 
 // @route   PUT /api/users/profile
 // @access  Private
